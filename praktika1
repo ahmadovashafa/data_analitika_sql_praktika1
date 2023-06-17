@@ -1,0 +1,111 @@
+/*Email-i olmayan müştərilərin telefon nömrələrini göstərin.*/
+
+1)select phone_number from hr.employees  where email is null;
+
+/*İstifadəçinin adını əgər varsa email-ni, yoxdursa telefon nömrəsini əlaqa vasitəsi kimi göstərin.*/
+
+2) select first_name ,
+case 
+when email is not null then email
+else phone_number
+    end
+from hr.employees;
+
+/*Ən çox maaş alan 10 işçinin adını və soyadını qaytaracaq query yazın. */
+
+3) select first_name,last_name,salary 
+    from hr.employees
+    order by salary desc
+    fetch first 10 rows only;
+
+/* Adının uzunluğu 5-dən böyük və ya soyadının uzunluğu 6-dan böyük olan və maaşı 1500-dən böyük olan işçilərin adını, soyadını və maaşını qaytaracaq query yazın*/
+
+4)select first_name, last_name,salary
+from hr.employees
+where length(first_name)>5 or length(last_name)>6 and salary>1500;
+
+/*Manager_id-si null olmayan, Department_id 100 və ya 101 olan,   job_id-si ad_press olmayan işçilərin adını və soyadını çıxarın. Sıralama maaşa görə olmalıdır.*/
+
+
+
+5) select first_name,last_name 
+    from hr.employees
+    where manager_id is not null 
+    and  department_id in(100,101)
+    and job_id != 'AD_PRES'
+order by salary desc;
+
+/* Commision_pct və ya manager_id-si null olan, maaşı 2000-3000 arasında olan işçilərin adını, soyadını və maaşını çıxarın.*/
+
+6) select first_name, last_name, salary
+from hr.employees
+where commission_pct is null or manager_id is null and
+salary between 2000 and 3000;
+
+/*Maaşı 1500-2000 arasında olan işçilərin adını qaytaran query yazın. Sıralama soyad sütununa əsasən olsun.*/
+
+7) select first_name,last_name 
+    from hr.employees
+    where salary  between 15000 and 20000
+order by last_name;
+
+/*Ad və soyad sütunlarını birləşdirərək tam ad şəklində qaytaran query yazın. Sıralama maaşa görə azalan sırada olsun və ilk 3 sətir çıxmaq şərti ilə növbəti 10 sətir qaytarılsın.*/
+
+8) select employee_id,concat(concat(first_name, ' '), last_name)  as  tam_ad
+from hr.employees
+order by  salary desc
+offset 3 rows 
+fetch first 10 rows  only;
+/*Hr.employees table-ındakı işçilərin illik əmək haqqını göstərin.*/
+
+9) select salary*12 as illik_emekhaqqi from hr.employees;
+
+/*Ad və soyad sütunlarını birləştirərək tam ad olaraq göstərin, lakin ad və soyad arasında boşluq olsun.*/
+
+10) select employee_id, concat(concat(first_name, ' '), last_name) as tam_ad
+from hr.employees;
+
+/* Manager_id-si 100 olan işçilərin adını əmək haqqına görə azdan çoxa doğru sıralanmış şəkildə göstərin.*/
+
+11) select first_name,salary from hr.employees 
+where manager_id =100
+order by salary ;
+
+/*Manager_id-si 100 və 200 olan işçilərin adını əmək haqqına görə azdan çoxa doğru sıralanmış şəkildə göstərin.*/
+
+
+12) select first_name,salary from hr.employees 
+where manager_id in (100,200)
+order by salary ;
+
+/*Əmək haqqı 4000-dən çox olan işçilərin məlumatlarını əmək haqqına görə azdan çoxa sıralanmış şəkildə göstərin.*/
+
+13)  select *from hr.employees
+where salary>4000
+order by salary ;
+
+/* Adı “E” ilə başlayan işçilərin məlumatlarını göstərin. Həm like ilə, həm də substr() ilə edin.*/
+
+
+
+14) select  *from hr.employees
+where first_name like 'E%';
+select*from hr.employees where substr(first_name,1,1)=’E’;
+
+/* İşçiləri adına görə, adı eyni olanları isə əmək haqqına görə sıralayın.*/
+
+
+15) select employee_id, concat(concat(first_name, ' '), last_name) as tam_ad, salary
+from hr.employees
+order by tam_ad, salary;
+
+/* Bütün işçilərin adını, soyadını və departament adını göstərin.*/
+
+
+16) select e.first_name,e.last_name,d.department_name
+from hr.employees e
+inner join 
+	hr.departments d
+		on e.employee_id=d.department_id;
+
+
